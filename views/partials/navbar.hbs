@@ -23,32 +23,60 @@
     </a>
 
     <nav class="d-inline-flex mt-2 mt-md-0 ms-md-auto">
-      {{! <a
-        class="me-3 py-2 link-body-emphasis text-decoration-none fw-semibold"
-        href="/"
-      >Main page</a> }}
-      <a
-        class="me-3 py-2 link-body-emphasis text-decoration-none fw-semibold"
-        href="/products"
-      >Products</a>
-      <a
-        class="me-3 py-2 link-body-emphasis text-decoration-none fw-semibold"
-        href="/add"
-      >Add</a>
+
+      {{#if isProducts}}
+        <a
+          class="me-3 py-2 link-body-emphasis fw-semibold"
+          href="/products"
+        >Products</a>
+      {{else}}
+        <a
+          class="me-3 py-2 link-body-emphasis fw-semibold text-decoration-none"
+          href="/products"
+        >Products</a>
+      {{/if}}
+
+      {{#if isAdd}}
+        <a class="me-3 py-2 link-body-emphasis fw-semibold" href="/add">Add</a>
+      {{else}}
+        <a
+          class="me-3 py-2 link-body-emphasis text-decoration-none fw-semibold"
+          href="/add"
+        >Add</a>
+      {{/if}}
+
       <div
         class="btn-group"
         role="group"
         aria-label="Basic mixed styles example"
       >
-        <button type="button" class="btn btn-primary">
-          <a href="/login" class="text-light text-decoration-none">Login</a>
-        </button>
-        <button type="button" class="btn btn-success">
-          <a
-            href="/register"
-            class="text-light text-decoration-none"
-          >Register</a>
-        </button>
+
+        {{#if isLogin}}
+          <button type="button" class="btn btn-primary active">
+            <a href="/login" class="text-light text-decoration-none">Login</a>
+          </button>
+        {{else}}
+          <button type="button" class="btn btn-primary">
+            <a href="/login" class="text-light text-decoration-none">Login</a>
+          </button>
+        {{/if}}
+
+        {{#if isRegister}}
+          <button type="button" class="btn btn-success active">
+            <a
+              href="/register"
+              class="text-light text-decoration-none"
+            >Register</a>
+          </button>
+        {{else}}
+          <button type="button" class="btn btn-success">
+            <a
+              href="/register"
+              class="text-light text-decoration-none"
+            >Register</a>
+          </button>
+        {{/if}}
+
       </div>
     </nav>
   </div>
