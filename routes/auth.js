@@ -8,21 +8,26 @@ router.get("/login", (req, res) => {
   res.render("login", {
     title: "Login | Otabek",
     isLogin: true,
+    loginError: req.flash("loginError"),
   });
 });
 router.post("/login", async (req, res) => {
-  const existUser = await User.findOne({ email: req.body.email });
-  if (!existUser) {
-    console.log("User not found");
-    res.redirect("/register");
+  const { email, password } = req.body;
+  if (!email || !password) {
+    req.flash("loginError", "all fields required");
+    res.redirect("/login");
     return;
   }
-  const isPasswordEqual = await bcrypt.compare(
-    req.body.password,
-    existUser.password
-  );
+  const existUser = await User.findOne({ email });
+  if (!existUser) {
+    req.flash("loginError", "User Not Found");
+    res.redirect("/login");
+    return;
+  }
+  const isPasswordEqual = await bcrypt.compare(password, existUser.password);
   if (!isPasswordEqual) {
-    console.log("Password wrong");
+    req.flash("loginError", "Password Wrong");
+    res.redirect("/login");
     return;
   }
   console.log(existUser);
@@ -33,16 +38,34 @@ router.get("/register", (req, res) => {
   res.render("register", {
     title: "Register | Otabek",
     isRegister: true,
+    registerError: req.flash("registerError"),
   });
 });
 router.post("/register", async (req, res) => {
-  const hashedPassword = await bcrypt.hash(req.body.password, 10);
+  const { email, password, firstName, lastName } = req.body;
+  const hashedPassword = await bcrypt.hash(password, 10);
+  const existUser = await User.findOne({ email });
   const userData = {
-    firstName: req.body.firstName,
-    lastName: req.body.lastName,
-    email: req.body.email,
+    firstName,
+    lastName,
+    email,
     password: hashedPassword,
   };
+  if (!email || !password || !firstName || !lastName) {
+    req.flash("registerError", "All Fields Required");
+    res.redirect("/register");
+    return;
+  }
+  if (existUser) {
+    req.flash("registerError", "This User Already Exists");
+    res.redirect("/register");
+    return;
+  }
+  if (password.length < 3) {
+    req.flash("registerError", "Password Must Contain At Least 3 Elements");
+    res.redirect("/register");
+    return;
+  }
   const user = await User.create(userData);
   res.redirect("/");
 });
