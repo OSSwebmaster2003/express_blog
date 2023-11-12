@@ -1,5 +1,6 @@
 import { Router } from "express";
 import User from "../models/User.js";
+import bcrypt from "bcrypt";
 
 const router = Router();
 
@@ -9,8 +10,22 @@ router.get("/login", (req, res) => {
     isLogin: true,
   });
 });
-router.post("/login", (req, res) => {
-  console.log(req.body);
+router.post("/login", async (req, res) => {
+  const existUser = await User.findOne({ email: req.body.email });
+  if (!existUser) {
+    console.log("User not found");
+    res.redirect("/register");
+    return;
+  }
+  const isPasswordEqual = await bcrypt.compare(
+    req.body.password,
+    existUser.password
+  );
+  if (!isPasswordEqual) {
+    console.log("Password wrong");
+    return;
+  }
+  console.log(existUser);
   res.redirect("/");
 });
 
@@ -21,14 +36,14 @@ router.get("/register", (req, res) => {
   });
 });
 router.post("/register", async (req, res) => {
+  const hashedPassword = await bcrypt.hash(req.body.password, 10);
   const userData = {
     firstName: req.body.firstName,
     lastName: req.body.lastName,
     email: req.body.email,
-    password: req.body.password,
+    password: hashedPassword,
   };
   const user = await User.create(userData);
-  console.log(user);
   res.redirect("/");
 });
 
