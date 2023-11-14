@@ -3,9 +3,11 @@ import { create } from "express-handlebars";
 import mongoose from "mongoose";
 import AuthRoutes from "./routes/auth.js";
 import ProductRoutes from "./routes/products.js";
-import * as dotenv from "dotenv";
 import flash from "connect-flash";
 import session from "express-session";
+import token from "./middleware/token.js";
+import cookieParser from "cookie-parser";
+import * as dotenv from "dotenv";
 
 dotenv.config();
 
@@ -25,6 +27,8 @@ app.use(express.static("public"));
 app.use(express.json());
 app.use(session({ secret: "Otabek", resave: false, saveUninitialized: false }));
 app.use(flash());
+app.use(cookieParser());
+app.use(token);
 
 app.use(AuthRoutes);
 app.use(ProductRoutes);

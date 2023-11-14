@@ -8,6 +8,4 @@ const generateJwtToken = (userId) => {
   return accessToken;
 };
 
-const getUserId = (userId) => {};
-
 export { generateJwtToken };
