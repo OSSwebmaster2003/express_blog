@@ -22,4 +22,8 @@ router.get("/add", (req, res) => {
   });
 });
 
+router.post("/add-product", (req, res) => {
+  res.send("Product Added");
+  console.log(req.body);
+});
 export default router;

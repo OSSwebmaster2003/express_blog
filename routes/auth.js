@@ -5,11 +5,6 @@ import { generateJwtToken } from "../services/token.js";
 
 const router = Router();
 
-router.get("/logout", (req, res) => {
-  res.clearCookie("token");
-  res.redirect("/");
-});
-
 router.get("/login", (req, res) => {
   if (req.cookies.token) {
     res.redirect("/");
@@ -21,6 +16,12 @@ router.get("/login", (req, res) => {
     loginError: req.flash("loginError"),
   });
 });
+
+router.get("/logout", (req, res) => {
+  res.clearCookie("token");
+  res.redirect("/");
+});
+
 router.post("/login", async (req, res) => {
   const { email, password } = req.body;
   if (!email || !password) {
