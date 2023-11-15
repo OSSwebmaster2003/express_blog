@@ -7,9 +7,11 @@ const router = Router();
 
 router.get("/", async (req, res) => {
   const products = await Product.find().lean();
+  console.log(req.userId);
   res.render("index", {
     title: "Home page | Otabek",
-    products,
+    products: products.reverse(),
+    userId: req.userId ? req.userId.toString() : null,
   });
 });
 
