@@ -1,5 +1,7 @@
 import { Router } from "express";
 import Product from "../models/Product.js";
+import authMiddleware from "../middleware/auth.js";
+import userMiddleware from "../middleware/user.js";
 
 const router = Router();
 
@@ -16,17 +18,22 @@ router.get("/products", (req, res) => {
   });
 });
 
-router.get("/add", (req, res) => {
+router.get("/add", authMiddleware, (req, res) => {
   res.render("add", {
     title: "Add | Otabek",
     isAdd: true,
+    AddProductError: req.flash("AddProductError"),
   });
 });
 
-router.post("/add-product", async (req, res) => {
+router.post("/add-product", userMiddleware, async (req, res) => {
   const { title, description, image, price } = req.body;
-  const products = await Product.create(req.body);
-  console.log(products);
+  if (!title || !description || !image || !price) {
+    req.flash("AddProductError", "All fields required");
+    res.redirect("/add");
+    return;
+  }
+  await Product.create({ ...req.body, user: req.userId });
   res.redirect("/");
 });
 export default router;

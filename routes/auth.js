@@ -1,6 +1,7 @@
 import { Router } from "express";
 import User from "../models/User.js";
 import bcrypt from "bcrypt";
+import authMiddleware from "../middleware/auth.js";
 import { generateJwtToken } from "../services/token.js";
 
 const router = Router();
@@ -14,6 +15,18 @@ router.get("/login", (req, res) => {
     title: "Login | Otabek",
     isLogin: true,
     loginError: req.flash("loginError"),
+  });
+});
+
+router.get("/register", (req, res) => {
+  if (req.cookies.token) {
+    res.redirect("/");
+    return;
+  }
+  res.render("register", {
+    title: "Register | Otabek",
+    isRegister: true,
+    registerError: req.flash("registerError"),
   });
 });
 
@@ -49,21 +62,9 @@ router.post("/login", async (req, res) => {
   res.redirect("/");
 });
 
-router.get("/register", (req, res) => {
-  if (req.cookies.token) {
-    res.redirect("/");
-    return;
-  }
-  res.render("register", {
-    title: "Register | Otabek",
-    isRegister: true,
-    registerError: req.flash("registerError"),
-  });
-});
 router.post("/register", async (req, res) => {
   const { email, password, firstName, lastName } = req.body;
   const hashedPassword = await bcrypt.hash(password, 10);
-  const existUser = await User.findOne({ email });
   const userData = {
     firstName,
     lastName,
@@ -75,7 +76,8 @@ router.post("/register", async (req, res) => {
     res.redirect("/register");
     return;
   }
-  if (existUser) {
+  const candidate = await User.findOne({ email });
+  if (candidate) {
     req.flash("registerError", "This User Already Exists");
     res.redirect("/register");
     return;

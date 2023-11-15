@@ -1,5 +1,10 @@
 <div class="w-75 mx-auto">
   <p class="fs-1">Add Product</p>
+  {{#if AddProductError}}
+    <div class="alert alert-danger" role="alert">
+      {{AddProductError}}
+    </div>
+  {{/if}}
   <form action="/add-product" method="post">
     <div class="form-floating mb-3">
       <input
