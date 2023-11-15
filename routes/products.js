@@ -5,9 +5,11 @@ import userMiddleware from "../middleware/user.js";
 
 const router = Router();
 
-router.get("/", (req, res) => {
+router.get("/", async (req, res) => {
+  const products = await Product.find().lean();
   res.render("index", {
     title: "Home page | Otabek",
+    products,
   });
 });
 
