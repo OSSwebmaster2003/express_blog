@@ -22,10 +22,11 @@
               role="group"
               aria-label="Basic example"
             >
-              <button
+              <a
                 type="button"
                 class="btn btn-outline-primary"
-              >Details</button>
+                href="/product/{{_id}}"
+              >Details</a>
               {{#if @root.token}}
                 {{#ifequal user @root.userId}}
                   <button

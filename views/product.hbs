@@ -1,0 +1,12 @@
+<div class="w-full h-100">
+  <img src={{product.image}} alt="image" class="product-image" />
+  <p class="fs-1 p-0 m-0">{{product.title}}</p>
+  <div class="d-flex gap-3 align-items-center">
+    <small class="text-muted">Created at :
+      <b>{{formatDate product.createdAt}}</b>
+    </small>
+    <p class="fw-bold m-0">${{product.price}}.00</p>
+  </div>
+  <p class="mt-3">{{product.description}}</p>
+  <h5>Author : <b>{{product.user.firstName}} {{product.user.lastName}}</b></h5>
+</div>

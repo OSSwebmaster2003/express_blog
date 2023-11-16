@@ -17,3 +17,7 @@
   padding: 0;
   margin: 0;
 }
+.product-image {
+  height: 70vh;
+  width: 100%;
+}

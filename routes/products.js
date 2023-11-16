@@ -18,7 +18,6 @@ router.get("/", async (req, res) => {
 router.get("/products", async (req, res) => {
   const user = req.userId ? req.userId.toString() : null;
   const myProducts = await Product.find({ user }).populate("user").lean();
-  console.log(myProducts);
   res.render("products", {
     title: "Products | Otabek",
     isProducts: true,
@@ -31,6 +30,15 @@ router.get("/add", authMiddleware, (req, res) => {
     title: "Add | Otabek",
     isAdd: true,
     AddProductError: req.flash("AddProductError"),
+  });
+});
+
+router.get("/product/:id", async (req, res) => {
+  const id = req.params.id;
+  const product = await Product.findById(id).populate("user").lean();
+  console.log(product);
+  res.render("product", {
+    product: product,
   });
 });
 
