@@ -21,3 +21,11 @@
   height: 70vh;
   width: 100%;
 }
+.delete-btn {
+  border: none;
+  outline: none;
+  background: inherit;
+}
+.delete-btn:hover {
+  color: #fff;
+}

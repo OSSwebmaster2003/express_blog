@@ -34,10 +34,15 @@
                     class="btn btn-outline-success"
                     href="/edit-product/{{_id}}"
                   >Edit</a>
-                  <button
-                    type="button"
-                    class="btn btn-outline-danger"
-                  >Delete</button>
+                  <form
+                    action="/delete-product/{{_id}}"
+                    method="post"
+                    class="btn btn-outline-danger m-0"
+                  >
+                    <button type="submit" class="delete-btn">
+                      Delete
+                    </button>
+                  </form>
                 {{/ifequal}}
               {{/if}}
             </div>
